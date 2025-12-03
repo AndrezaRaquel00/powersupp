@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagens/faviconn.png') }}">
+  <title>Frete Grátis - Gym Ware</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 25px;
+      background: #f5f7fa;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 8px;
+    }
+
+    p {
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: #3498db;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 20px;
+      background: #3498db;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Frete Grátis em todo o Brasil!</h1>
+
+<p>
+  Agora você garante <span class="highlight">FRETE GRÁTIS</span> em qualquer cidade do Brasil 
+  ao realizar compras acima de <span class="highlight">R$250,00</span>.
+</p>
+
+<p>
+  O benefício é aplicado automaticamente no carrinho quando o total da compra atingir
+  ou ultrapassar o valor mínimo.
+</p>
+
+<p>
+  Aproveite para adicionar mais produtos e garantir o frete grátis! Aqui é GymWare!
+</p>
+
+<a href="{{ url_for('index') }}" class="back-btn">Voltar à Loja</a>
+
+</body>
+</html>

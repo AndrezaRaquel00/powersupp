@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagens/faviconn.png') }}">
+  <title>Cadastro - Gym Ware</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(135deg, #6dd5fa, #2980b9);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      margin: 0;
+      color: #333;
+    }
+
+    .container {
+      background: #fff;
+      padding: 40px 30px 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      width: 380px;
+      text-align: center;
+    }
+
+    .logo {
+      margin-bottom: 15px;
+    }
+
+    .logo svg {
+      width: 50px;
+      height: 50px;
+      vertical-align: middle;
+      fill: #19a3e2;
+    }
+
+    .logo-text {
+      font-weight: 600;
+      font-size: 28px;
+      color: #19a3e2;
+      display: inline-block;
+      margin-left: 10px;
+      vertical-align: middle;
+      user-select: none;
+      letter-spacing: 1.2px;
+    }
+
+    h2 {
+      font-weight: 600;
+      margin-bottom: 30px;
+      font-size: 28px;
+      letter-spacing: 1px;
+      color: #222;
+    }
+
+    form {
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #555;
+      font-size: 15px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 16px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      margin-bottom: 18px;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: #19a3e2;
+      box-shadow: 0 0 8px #19a3e2aa;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #19a3e2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 6px 14px #19a3e2cc;
+    }
+
+    button:hover {
+      background-color: #1582b3;
+      box-shadow: 0 8px 22px #1582b3cc;
+    }
+
+    .flash {
+      background-color: #ffdddd;
+      border: 1px solid #e88787;
+      color: #b20000;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo" aria-label="Logo Gym Ware">
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <rect x="6" y="22" width="8" height="20" rx="2" />
+        <rect x="50" y="22" width="8" height="20" rx="2" />
+        <rect x="14" y="28" width="36" height="8" rx="4" />
+      </svg>
+      <span class="logo-text">Gym Ware</span>
+    </div>
+
+    <h2>Cadastro</h2>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="post" action="{{ url_for('cadastro') }}">
+      <label for="nome_completo">Nome completo:</label>
+      <input id="nome_completo" type="text" name="nome_completo" required />
+
+      <label for="email">E-mail:</label>
+      <input id="email" type="text" name="email" required autocomplete="email" />
+
+      <label for="data_nascimento">Data de nascimento:</label>
+      <input id="data_nascimento" type="date" name="data_nascimento" required />
+
+      <label for="genero">Gênero:</label>
+      <select id="genero" name="genero" required>
+        <option value="">Selecione</option>
+        <option value="Masculino">Masculino</option>
+        <option value="Feminino">Feminino</option>
+        <option value="Outro">Outro</option>
+        <option value="Prefiro não dizer">Prefiro não dizer</option>
+      </select>
+
+      <label for="usuario">Nome de usuário:</label>
+      <input id="usuario" type="text" name="usuario" required autocomplete="username" />
+
+      <label for="senha">Senha:</label>
+      <input id="senha" type="password" name="senha" required autocomplete="new-password" />
+
+      <label for="confirmar_senha">Confirmar senha:</label>
+      <input id="confirmar_senha" type="password" name="confirmar_senha" required autocomplete="new-password" />
+
+      <button type="submit">Cadastrar</button>
+    </form>
+  </div>
+</body>
+</html>

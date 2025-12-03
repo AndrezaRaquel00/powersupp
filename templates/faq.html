@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perguntas Frequentes - PowerSupps</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagens/faviconn.png') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f8f9fa;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #1a73e8;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .faq-container {
+      max-width: 900px;
+      margin: 50px auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      padding: 30px 40px;
+    }
+
+    .faq-item {
+      margin-bottom: 25px;
+    }
+
+    .faq-question {
+      font-weight: bold;
+      color: #1a73e8;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .faq-answer {
+      color: #444;
+      line-height: 1.6;
+    }
+
+    a.voltar {
+      display: inline-block;
+      margin: 30px auto 0;
+      text-decoration: none;
+      color: white;
+      background: #1a73e8;
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    a.voltar:hover {
+      background: #0d5bba;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1><i class="fas fa-question-circle"></i> Perguntas Frequentes (FAQ)</h1>
+  </header>
+
+  <div class="faq-container">
+    {% set perguntas = [
+      ("O que é a PowerSupps?", "A PowerSupps é uma loja virtual especializada em suplementos, roupas e acessórios de academia."),
+      ("Vocês vendem produtos originais?", "Sim! Todos os nossos produtos são 100% originais e vêm diretamente dos distribuidores oficiais."),
+      ("Os suplementos têm validade garantida?", "Sim, todos os produtos têm validade atualizada e garantida pelo fabricante."),
+      ("Vocês fazem entregas em todo o Brasil?", "Sim, enviamos para todas as regiões do país através de transportadoras parceiras e Correios."),
+      ("Qual o prazo médio de entrega?", "Depende da sua localização. Normalmente de 3 a 10 dias úteis após a confirmação do pagamento."),
+      ("Posso parcelar minhas compras?", "Sim! Aceitamos parcelamentos em até 6x sem juros no cartão de crédito."),
+      ("Quais formas de pagamento são aceitas?", "Cartão de crédito, PIX, boleto bancário e PayPal."),
+      ("Como acompanho meu pedido?", "Você pode acompanhar o status do pedido na seção 'Meus Pedidos' após fazer login."),
+      ("Posso alterar meu endereço após a compra?", "Se o pedido ainda não tiver sido despachado, entre em contato com nosso suporte para atualizar o endereço."),
+      ("Vocês têm loja física?", "Atualmente, trabalhamos apenas com vendas online."),
+      ("Os produtos têm garantia?", "Sim! Oferecemos garantia de fábrica e suporte direto com nossa equipe."),
+      ("Como posso entrar em contato com o suporte?", "Pelo e-mail contato@powersupps.com.br ou pelo WhatsApp disponível no rodapé do site."),
+      ("Vocês oferecem frete grátis?", "Sim, para compras acima de R$250,00 o frete é totalmente gratuito."),
+      ("É seguro comprar no site?", "Sim! Utilizamos criptografia SSL e métodos de pagamento certificados."),
+      ("Posso devolver um produto?", "Sim, dentro de até 7 dias após o recebimento, conforme o Código de Defesa do Consumidor."),
+      ("Os produtos têm lacre de segurança?", "Todos os suplementos são enviados lacrados e com nota fiscal."),
+      ("Posso retirar o pedido pessoalmente?", "Por enquanto, trabalhamos apenas com entrega via transportadora."),
+      ("Como uso o cupom de desconto?", "Basta inserir o código do cupom na tela de checkout antes de finalizar a compra."),
+      ("Vocês vendem roupas de treino?", "Sim! Temos uma linha completa de roupas e acessórios fitness."),
+      ("Vocês fazem parcerias com academias?", "Sim, entre em contato conosco para condições especiais para academias e revendedores.")
+    ] %}
+    
+    {% for pergunta, resposta in perguntas %}
+      <div class="faq-item">
+        <div class="faq-question">{{ pergunta }}</div>
+        <div class="faq-answer">{{ resposta }}</div>
+      </div>
+    {% endfor %}
+
+    <a href="{{ url_for('index') }}" class="voltar"><i class="fas fa-arrow-left"></i> Voltar à loja</a>
+  </div>
+
+</body>
+</html>

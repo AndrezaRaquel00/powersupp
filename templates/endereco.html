@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cadastro de Endereço - PowerSupps</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagens/faviconn.png') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8f9fa;
+      padding: 30px 5%;
+      color: #202124;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #1a73e8;
+    }
+
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      margin-top: 15px;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #dfe1e5;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #1a73e8;
+      box-shadow: 0 0 5px #a8c0f0;
+    }
+
+    .small-input {
+      max-width: 100px;
+      display: inline-block;
+      margin-right: 20px;
+    }
+
+    .btn-primary {
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      padding: 15px 25px;
+      margin-top: 30px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+
+    .btn-primary:hover {
+      background-color: #155ab6;
+    }
+
+    .row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .row > div {
+      flex: 1;
+      min-width: 120px;
+    }
+
+    /* Responsividade */
+    @media (max-width: 480px) {
+      .row {
+        flex-direction: column;
+      }
+      .small-input {
+        max-width: 100%;
+        margin-right: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>Cadastro / Atualização de Endereço</h2>
+  <form method="POST" action="{{ url_for('endereco') }}">
+    <label for="cep">CEP</label>
+    <input type="text" id="cep" name="cep" required maxlength="9" placeholder="00000-000" value="{{ endereco.cep if endereco else '' }}">
+
+    <label for="rua">Rua</label>
+    <input type="text" id="rua" name="rua" required value="{{ endereco.rua if endereco else '' }}">
+
+    <div class="row">
+      <div>
+        <label for="numero">Número</label>
+        <input type="text" id="numero" name="numero" required value="{{ endereco.numero if endereco else '' }}">
+      </div>
+      <div>
+        <label for="complemento">Complemento</label>
+        <input type="text" id="complemento" name="complemento" value="{{ endereco.complemento if endereco else '' }}">
+      </div>
+    </div>
+
+    <label for="bairro">Bairro</label>
+    <input type="text" id="bairro" name="bairro" required value="{{ endereco.bairro if endereco else '' }}">
+
+    <div class="row">
+      <div>
+        <label for="cidade">Cidade</label>
+        <input type="text" id="cidade" name="cidade" required value="{{ endereco.cidade if endereco else '' }}">
+      </div>
+      <div>
+        <label for="estado">Estado (UF)</label>
+        <input type="text" id="estado" name="estado" required maxlength="2" value="{{ endereco.estado if endereco else '' }}">
+      </div>
+    </div>
+
+    <label for="pais">País</label>
+    <input type="text" id="pais" name="pais" required value="{{ endereco.pais if endereco else 'Brasil' }}">
+
+    <button type="submit" class="btn-primary">Salvar Endereço</button>
+  </form>
+</body>
+</html>

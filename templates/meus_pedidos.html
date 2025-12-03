@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagens/faviconn.png') }}">
+  <title>Meus Pedidos - Gym Ware</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 900px;
+      margin: 30px auto;
+      background-color: #f9f9f9;
+      color: #333;
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 30px;
+      color: #222;
+      border-bottom: 3px solid #3498db;
+      padding-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .pedido {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 10px rgb(0 0 0 / 0.1);
+    }
+
+    .pedido-header {
+      font-weight: 700;
+      font-size: 20px;
+      margin-bottom: 12px;
+      color: #2980b9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pedido-data {
+      font-size: 14px;
+      color: #555;
+      font-style: italic;
+    }
+
+    ul.itens-pedido {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 15px;
+    }
+
+    ul.itens-pedido li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+    }
+
+    ul.itens-pedido li:last-child {
+      border-bottom: none;
+    }
+
+    ul.itens-pedido img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      margin-right: 20px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      background-color: #fff;
+    }
+
+    .item-info {
+      flex-grow: 1;
+      font-weight: 600;
+    }
+
+    .item-preco {
+      font-weight: 700;
+      color: #3498db;
+      font-size: 16px;
+      min-width: 70px;
+      text-align: right;
+    }
+
+    a.voltar {
+      display: inline-block;
+      margin-top: 30px;
+      color: #3498db;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a.voltar:hover {
+      color: #21618c;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Meus Pedidos</h1>
+
+  {% if pedidos %}
+    {% for pedido in pedidos %}
+      <div class="pedido">
+        <div class="pedido-header">
+          Pedido #{{ pedido.id }}
+          <span class="pedido-data">{{ pedido.data.strftime('%d/%m/%Y %H:%M:%S') }}</span>
+        </div>
+        <ul class="itens-pedido">
+          {% for item in pedido.itens %}
+            <li>
+              <img src="{{ url_for('static', filename='uploads/' ~ item.produto.imagem) }}" alt="{{ item.produto.nome }}">
+              <div class="item-info">{{ item.produto.nome }}</div>
+              <div class="item-preco">R$ {{ "%.2f"|format(item.produto.preco) }}</div>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>Você ainda não fez nenhum pedido.</p>
+  {% endif %}
+
+  <a href="{{ url_for('index') }}" class="voltar">← Voltar à loja</a>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!-- finalizar_compra.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagens/faviconn.png') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Finalizar Compra - Gym Ware</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f0f2f5;
+      padding: 20px;
+      max-width: 650px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      margin-bottom: 40px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #34495e;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      transition: border 0.3s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+
+    input[type="submit"] {
+      background: #27ae60;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 25px;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: background 0.3s ease, transform 0.2s ease;
+      width: 100%;
+    }
+
+    input[type="submit"]:hover {
+      background: #219150;
+      transform: translateY(-2px);
+    }
+
+    /* ===== RECOMENDAÇÕES ===== */
+    .recomendacoes {
+      text-align: center;
+    }
+
+    .recomendacoes h2 {
+      color: #007bff;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+    }
+
+    .produtos {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 25px;
+    }
+
+    .produto {
+      background: #fff;
+      border-radius: 12px;
+      padding: 15px;
+      width: 180px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: center;
+    }
+
+    .produto:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .produto img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      background-color: #f8f8f8;
+    }
+
+    .produto h3 {
+      color: #2c3e50;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .produto p {
+      color: #007bff;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .produto button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.3s;
+    }
+
+    .produto button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Informe seu Endereço</h1>
+
+  <form method="POST" action="{{ url_for('finalizar_compra') }}">
+    <label for="cep">CEP *</label>
+    <input type="text" id="cep" name="cep" placeholder="00000-000" pattern="\d{5}-?\d{3}" title="Formato 00000-000" required>
+
+    <label for="rua">Rua *</label>
+    <input type="text" id="rua" name="rua" placeholder="Nome da rua" required>
+
+    <label for="numero">Número *</label>
+    <input type="text" id="numero" name="numero" placeholder="Número da residência" required>
+
+    <label for="complemento">Complemento</label>
+    <input type="text" id="complemento" name="complemento" placeholder="Apartamento, bloco, etc. (opcional)">
+
+    <label for="bairro">Bairro *</label>
+    <input type="text" id="bairro" name="bairro" placeholder="Bairro" required>
+
+    <label for="cidade">Cidade *</label>
+    <input type="text" id="cidade" name="cidade" placeholder="Cidade" required>
+
+    <label for="estado">Estado *</label>
+    <select id="estado" name="estado" required>
+      <option value="">Selecione</option>
+      <option value="SP">São Paulo</option>
+      <option value="RJ">Rio de Janeiro</option>
+      <option value="MG">Minas Gerais</option>
+      <option value="BA">Bahia</option>
+      <option value="RS">Rio Grande do Sul</option>
+      <!-- (adicione outros se quiser) -->
+    </select>
+
+    <label for="email">E-mail *</label>
+    <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" required>
+
+    <input type="submit" value="Finalizar Compra">
+  </form>
+<div class="recomendacoes">
+  <h2>Você também pode gostar 💪</h2>
+  <div class="produtos">
+
+    <div class="produto">
+      <img src="{{ url_for('static', filename='imagens/whey.webp') }}">
+      <h3>Whey Protein</h3>
+      <p>R$ 149,90</p>
+      <button>Ver produto</button>
+    </div>
+
+    <div class="produto">
+      <img src="{{ url_for('static', filename='imagens/creatina.webp') }}">
+      <h3>Creatina Monohidratada</h3>
+      <p>R$ 89,90</p>
+      <button>Ver produto</button>
+    </div>
+
+    <div class="produto">
+      <img src="{{ url_for('static', filename='imagens/camiseta.jpg') }}">
+      <h3>Camiseta Dry Fit Azul</h3>
+      <p>R$ 59,90</p>
+      <button>Ver produto</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

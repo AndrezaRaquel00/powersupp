@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PowerSupps - Loja de Suplementos</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagens/faviconn.png') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    
+    :root {
+      --primary: #1a73e8;
+      --secondary: #34a853;
+      --accent: #fbbc05;
+      --danger: #ea4335;
+      --light: #f8f9fa;
+      --dark: #202124;
+      --gray: #5f6368;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8f9fa;
+      color: var(--dark);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Barra de frete grátis */
+    .shipping-bar {
+      background-color: var(--dark);
+      color: white;
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .shipping-bar strong {
+      color: var(--accent);
+    }
+
+    /* Cabeçalho */
+    .header {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 15px 5%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      position: sticky;
+      top: 38px;
+      z-index: 999;
+    }
+
+    .logo {
+      height: 60px;
+      transition: transform 0.3s;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .search-bar {
+      flex: 1;
+      min-width: 200px;
+      max-width: 500px;
+      position: relative;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 12px 20px;
+      border: 1px solid #dfe1e5;
+      border-radius: 24px;
+      font-size: 1rem;
+      transition: box-shadow 0.3s;
+    }
+
+    .search-bar input:focus {
+      outline: none;
+      box-shadow: 0 1px 6px rgba(32,33,36,0.28);
+    }
+
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .user-action {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .user-action i {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+    }
+
+    .user-action:hover {
+      color: var(--primary);
+    }
+
+    .cart-count {
+      background-color: var(--danger);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.7rem;
+      position: absolute;
+      top: -5px;
+      right: -5px;
+    }
+
+    /* Navegação */
+    .categories {
+      background-color: white;
+      padding: 10px 5%;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      gap: 25px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .categories::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category {
+      color: var(--gray);
+      font-weight: 500;
+      text-decoration: none;
+      white-space: nowrap;
+      padding: 5px 0;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .category:hover, .category.active {
+      color: var(--primary);
+    }
+
+    .category.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: var(--primary);
+    }
+
+    /* Produtos */
+    .products-container {
+      padding: 30px 5%;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: var(--danger);
+      color: white;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      z-index: 1;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+      background: #f8f9fa;
+      padding: 20px;
+    }
+
+    .product-info {
+      padding: 15px;
+    }
+
+    .product-title {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--dark);
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .product-rating {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .stars {
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+
+    .rating-count {
+      color: var(--gray);
+      font-size: 0.8rem;
+      margin-left: 5px;
+    }
+
+    .product-features {
+      margin-bottom: 15px;
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--secondary);
+      margin-bottom: 5px;
+    }
+
+    .feature i {
+      margin-right: 5px;
+      font-size: 0.7rem;
+    }
+
+    .product-price {
+      margin-bottom: 15px;
+    }
+
+    .current-price {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--dark);
+    }
+
+    .original-price {
+      font-size: 0.9rem;
+      color: var(--gray);
+      text-decoration: line-through;
+      margin-left: 5px;
+    }
+
+    .discount-badge {
+      color: var(--secondary);
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-left: 5px;
+    }
+
+    .product-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      text-align: center;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #0d5bba;
+    }
+
+    .btn-danger {
+      background-color: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #c5221f;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        padding: 15px;
+      }
+      
+      .search-bar {
+        width: 100%;
+        max-width: 100%;
+      }
+      
+      .user-actions {
+        width: 100%;
+        justify-content: space-around;
+      }
+      
+      .products-container {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .products-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .product-image {
+        height: 180px;
+      }
+    }
+    
+    /* Novo Rodapé */
+    footer {
+      background-color: #000;
+      color: #fff;
+      padding: 40px 0;
+      margin-top: auto;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .footer-column h3 {
+      color: #fff;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+
+    .footer-column p, .footer-column a {
+      color: #ccc;
+      line-height: 1.6;
+      font-size: 0.9rem;
+    }
+
+    .footer-column a {
+      text-decoration: none;
+      transition: color 0.3s;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .footer-column a:hover {
+      color: #19a3e2;
+    }
+
+    .footer-column ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-column li {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    .footer-column i {
+      margin-right: 10px;
+      color: #19a3e2;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-icons a {
+      color: #fff;
+      background-color: #333;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .social-icons a:hover {
+      background-color: #19a3e2;
+      transform: translateY(-3px);
+    }
+
+    .payment-methods {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+
+    .payment-methods i {
+      font-size: 1.8rem;
+      color: #ccc;
+    }
+
+    .copyright {
+      text-align: center;
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid #333;
+      color: #777;
+      font-size: 0.8rem;
+    }
+
+    /* Estilo para o botão Meus Pedidos (removido do body e colocado no header) */
+    .btn-pedidos {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+
+    .btn-pedidos i {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+    }
+
+    .btn-pedidos:hover {
+      color: var(--primary);
+    }
+  
+
+/* 🔹 Chatbot */
+#chatbot-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-family: 'Arial', sans-serif;
+  z-index: 9999;
+}
+
+#chatbot-button {
+  background-color: #007bff;
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 28px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+}
+
+#chatbot-button:hover {
+  background-color: #0056b3;
+}
+
+#chatbot-box {
+  width: 300px;
+  background-color: white;
+  border: 2px solid #007bff;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.hidden {
+  display: none;
+}
+
+#chatbot-header {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#chatbot-header h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+#chatbot-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+#chatbot-body {
+  padding: 10px;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.bot-msg {
+  color: #333;
+  background: #f1f1f1;
+  padding: 8px 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+#chatbot-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.chat-option {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chat-option:hover {
+  background-color: #0056b3;
+}
+/* ✨ Animação de abrir/fechar */
+#chatbot-box {
+  transform: translateY(30px);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+#chatbot-box.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+#chatbot-box.hidden {
+  display: none;
+}
+  </style>
+</head>
+<body>
+
+  <!-- Barra de frete grátis -->
+  <div class="shipping-bar">
+    <span>Adicione <strong>R$ 250,00</strong> ao carrinho para ter <strong>FRETE GRÁTIS</strong></span>
+  </div>
+
+  <!-- Cabeçalho -->
+  <header class="header">
+    <a href="{{ url_for('index') }}">
+      <img src="{{ url_for('static', filename='imagens/logo.png') }}" alt="PowerSupps" class="logo">
+    </a>
+    
+    <div class="search-bar">
+      <input type="text" placeholder="Encontre o suplemento ideal para você...">
+    </div>
+    
+    <div class="user-actions">
+      {% if not session.get('usuario') %}
+        <a href="{{ url_for('login') }}" class="user-action">
+          <i class="fas fa-user"></i>
+          <span>Entrar</span>
+        </a>
+        <a href="{{ url_for('cadastro') }}" class="user-action">
+          <i class="fas fa-user-plus"></i>
+          <span>Cadastrar</span>
+        </a>
+      {% else %}
+        <a href="#" class="user-action">
+          <i class="fas fa-user-circle"></i>
+          <span>{{ session['usuario'] }}</span>
+        </a>
+        <a href="{{ url_for('logout') }}" class="user-action">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Sair</span>
+        </a>
+
+        <!-- Botão Meus Pedidos no menu de usuário -->
+        <a href="{{ url_for('meus_pedidos') }}" class="btn-pedidos user-action">
+          <i class="fas fa-receipt"></i>
+          <span>Meus Pedidos</span>
+        </a>
+      {% endif %}
+      
+      <a href="{{ url_for('carrinho') }}" class="user-action" style="position: relative;">
+        <i class="fas fa-shopping-cart"></i>
+        <span>Carrinho</span>
+        {% if session.get('carrinho') %}
+          <span class="cart-count">{{ session['carrinho']|length }}</span>
+        {% endif %}
+      </a>
+      
+      {% if session.get('usuario') %}
+        <a href="{{ url_for('adicionar') }}" class="user-action">
+          <i class="fas fa-plus-circle"></i>
+          <span>Adicionar</span>
+        </a>
+</a>
+{% endif %}
+        {% if session.get('usuario') %}
+  <a href="{{ url_for('relatorios_admin') }}" class="user-action">
+    <i class="fas fa-chart-line"></i>
+    <span>Relatórios</span>
+  </a>
+   {% if session.get('usuario') %}
+<a href="{{ url_for('enviar_relatorio') }}" class="user-action">
+    <i class="fas fa-envelope"></i>
+    <span>Enviar Relatório</span>
+{% endif %}
+
+      {% endif %}
+    </div>
+    <a href="{{ url_for('faq') }}" class="user-action">
+  <i class="fas fa-question-circle"></i>
+  <span>FAQ</span>
+</a>
+
+  </header>
+
+
+  <!-- Lista de produtos -->
+  <main class="products-container">
+    {% for produto in produtos %}
+    <article class="product-card">
+      <span class="product-badge">10% OFF</span>
+      <img src="{{ url_for('static', filename='uploads/' + produto.imagem) }}" 
+           alt="{{ produto.nome }}" 
+           class="product-image"
+           loading="lazy">
+      
+      <div class="product-info">
+        <h3 class="product-title">{{ produto.nome }}</h3>
+        
+        <div class="product-rating">
+          <div class="stars">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <span class="rating-count">(1020)</span>
+        </div>
+        
+        <div class="product-features">
+          <div class="feature">
+            <i class="fas fa-check-circle"></i>
+            <span>AJUDA NA HIPERTROFIA</span>
+          </div>
+          <div class="feature">
+            <i class="fas fa-check-circle"></i>
+            <span>MELHOR CUSTO X BENEFÍCIO</span>
+          </div>
+          <div class="feature">
+            <i class="fas fa-check-circle"></i>
+            <span>ALTA CONCENTRAÇÃO DE PROTEÍNA</span>
+          </div>
+        </div>
+        
+        <div class="product-price">
+          <span class="current-price">R$ {{ "%.2f"|format(produto.preco) }}</span>
+          <span class="original-price">R$ {{ "%.2f"|format(produto.preco / 0.9) }}</span>
+          <span class="discount-badge">10% OFF</span>
+        </div>
+        
+        <div class="product-actions">
+          <a href="{{ url_for('adicionar_ao_carrinho', id=produto.id) }}" class="btn btn-primary">
+            <i class="fas fa-cart-plus"></i>
+            Adicionar ao carrinho
+          </a>
+          
+          {% if session.get('usuario') %}
+          <form action="{{ url_for('excluir', id=produto.id) }}" method="post" style="width: 100%;">
+            <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir {{ produto.nome }}?')">
+              <i class="fas fa-trash-alt"></i>
+              Excluir produto
+            </button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <!-- Coluna 1 - Sobre -->
+      <div class="footer-column">
+        <h3>PowerSupps</h3>
+        <p>Sua loja especializada em suplementos alimentares de alta qualidade para melhorar seu desempenho e saúde.</p>
+      </div>
+
+      <!-- Coluna 2 - Links Úteis -->
+      <div class="footer-column">
+        <h3>Links Úteis</h3>
+        <ul>
+          <li><a href="{{ url_for('index') }}"><i class="fas fa-chevron-right"></i> Página Inicial</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Sobre Nós</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Política de Entrega</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Termos de Serviço</a></li>
+        </ul>
+      </div>
+
+      <!-- Coluna 3 - Contato -->
+      <div class="footer-column">
+        <h3>Contato</h3>
+        <ul>
+          <li><i class="fas fa-map-marker-alt"></i> Av. Suplementos, 123 - São Paulo/SP</li>
+          <li><i class="fas fa-phone"></i> (11) 98765-4321</li>
+          <li><i class="fas fa-envelope"></i> contato@powersupps.com.br</li>
+        </ul>
+      </div>
+
+      <!-- Coluna 4 - Redes Sociais -->
+      <div class="footer-column">
+        <h3>Redes Sociais</h3>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+        
+        <h3 style="margin-top: 20px;">Formas de Pagamento</h3>
+        <div class="payment-methods">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-cc-paypal"></i>
+          <i class="fas fa-barcode"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="copyright">
+      <p>&copy; 2023 PowerSupps. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Adicionar interações básicas
+    document.addEventListener('DOMContentLoaded', function() {
+      // Atualizar contador do carrinho
+      function updateCartCount() {
+        fetch('/get_cart_count')
+          .then(response => response.json())
+          .then(data => {
+            const cartCount = document.querySelector('.cart-count');
+            if (cartCount) {
+              cartCount.textContent = data.count;
+              cartCount.style.display = data.count > 0 ? 'flex' : 'none';
+            }
+          });
+      }
+
+      // Atualizar a cada 5 segundos (simulação)
+      setInterval(updateCartCount, 5000);
+      
+      // Adicionar animação ao adicionar ao carrinho
+      const addToCartButtons = document.querySelectorAll('.btn-primary');
+      addToCartButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          if (!this.classList.contains('adding')) {
+            e.preventDefault();
+            const originalText = this.innerHTML;
+            this.classList.add('adding');
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adicionando...';
+            
+            // Simular requisição
+            setTimeout(() => {
+              window.location.href = this.getAttribute('href');
+            }, 800);
+          }
+        });
+      });
+    });
+  </script>
+  <!-- Chatbot -->
+<div id="chatbot-container">
+  <div id="chatbot-button">💬</div>
+  <div id="chatbot-box" class="hidden">
+    <div id="chatbot-header">
+      <h4>PowerBot 🏋️</h4>
+      <button id="chatbot-close">×</button>
+    </div>
+    <div id="chatbot-body">
+      <p class="bot-msg">Olá! 👋 Sou o PowerBot. Escolha uma pergunta abaixo:</p>
+      <div id="chatbot-options">
+        <button class="chat-option">O que é whey protein?</button>
+        <button class="chat-option">Qual o melhor horário para treinar?</button>
+        <button class="chat-option">Creatina faz mal?</button>
+        <button class="chat-option">Como ganhar massa muscular?</button>
+        <button class="chat-option">Suplementos substituem refeições?</button>
+        <button class="chat-option">Quanto tempo leva pra ver resultados?</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const chatbotButton = document.getElementById('chatbot-button');
+  const chatbotBox = document.getElementById('chatbot-box');
+  const chatbotClose = document.getElementById('chatbot-close');
+  const chatbotBody = document.getElementById('chatbot-body');
+
+  const respostas = {
+    "O que é whey protein?": "O whey protein é uma proteína derivada do soro do leite, usada para ajudar na recuperação muscular e no ganho de massa magra.",
+    "Qual o melhor horário para treinar?": "O melhor horário é aquele que se encaixa na sua rotina! O importante é manter a constância nos treinos.",
+    "Creatina faz mal?": "Não! A creatina é uma substância natural e segura quando usada nas doses recomendadas, melhorando força e desempenho.",
+    "Como ganhar massa muscular?": "Combine treinos de força, alimentação rica em proteínas e um bom descanso. A constância é a chave!",
+    "Suplementos substituem refeições?": "Não. Suplementos apenas complementam a dieta, não substituem refeições completas.",
+    "Quanto tempo leva pra ver resultados?": "Depende da intensidade, alimentação e genética. Em geral, 4 a 8 semanas já trazem mudanças visíveis."
+  };
+
+  // ✅ Animações e exibição
+  chatbotButton.addEventListener('click', () => {
+    chatbotBox.classList.remove('hidden');
+    chatbotBox.classList.add('show');
+  });
+
+  chatbotClose.addEventListener('click', () => {
+    chatbotBox.classList.remove('show');
+    setTimeout(() => {
+      chatbotBox.classList.add('hidden');
+    }, 300); // espera a animação terminar antes de esconder
+  });
+
+  // ✅ Respostas do bot
+  document.querySelectorAll('.chat-option').forEach(button => {
+    button.addEventListener('click', () => {
+      const pergunta = button.textContent;
+      const resposta = respostas[pergunta] || "Desculpe, não tenho uma resposta para isso.";
+      const userMsg = document.createElement('p');
+      userMsg.classList.add('bot-msg');
+      userMsg.style.background = '#007bff';
+      userMsg.style.color = 'white';
+      userMsg.textContent = pergunta;
+      chatbotBody.appendChild(userMsg);
+
+      const botMsg = document.createElement('p');
+      botMsg.classList.add('bot-msg');
+      botMsg.textContent = resposta;
+      chatbotBody.appendChild(botMsg);
+
+      chatbotBody.scrollTop = chatbotBody.scrollHeight;
+    });
+  });
+});
+</script>
+</body>
+</html>
+
